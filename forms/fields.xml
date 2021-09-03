@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<form>
+	<fields addfieldpath="/administrator/components/com_fabrik/models/fields" name="params">
+		<fieldset label="COM_FABRIK_OPTIONS" name="plg-list-autocompletesearch">
+
+			<field name="autocompletesearch_field"
+				type="listfields"
+				description="PLG_LIST_AUTOCOMPLETESEARCH_ELEMENT_DESC"
+				label="PLG_LIST_AUTOCOMPLETESEARCH_ELEMENT_LABEL"
+				repeat="true"
+				valueformat="tableelement"/>
+
+		</fieldset>
+	</fields>
+</form>
