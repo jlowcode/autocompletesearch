@@ -34,3 +34,7 @@ No campo `PLG_LIST_AUTOCOMPLETESEARCH_ELEMENT_LABEL` deve ser escolhido o elemen
 Para adicionar a caixa de busca ative o campo `Search all` e escolha os elementos a serem incluídos na busca no campo `Elements`.
 
 <img src="/images/4.png" width="900px" />
+
+## Observações
+
+1. Tentar ao se criar um plugin adicionar scripts javascript apenas em arquivos separados, adicionados no arquivo principal .php, para que não ocorra problemas de ao realizar uma soliticação ajax em uma página o script de um plugin interferir na requisição de outro plugin. (Caso entre frontendadmin e autocompletesearch, resolvido com "data.substr(0, data.indexOf('"}]') + 3)" no arquivo js.)
