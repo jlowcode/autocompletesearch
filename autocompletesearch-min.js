@@ -99,7 +99,7 @@ define(['jquery', 'fab/list-plugin', 'fab/fabrik', 'lib/debounce/jquery.ba-throt
                   processResults: function (data) {
                     // Transforms the top-level key of the response object from 'items' to 'results'
                     return {
-                      results: self.getUniqueListBy(JSON.parse(data), 'id')
+                      results: self.getUniqueListBy(JSON.parse(data.substr(0, data.indexOf('"}]') + 3)), 'id')
                     };
                   }
 
