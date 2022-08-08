@@ -41,12 +41,15 @@ class PlgFabrik_ListAutocompleteSearch extends PlgFabrik_List
 	public function onLoadJavascriptInstance($args)
 	{
 		$params = $this->getParams();
+		$input = $this->app->input;
+		$listId = $input->getInt('listid');;
 
 		parent::onLoadJavascriptInstance($args);
 
 		$opts = $this->getElementJSOptions();
 		$opts->acl = $this->acl;
 		$opts->elName = str_replace('.', '___', $params->get('autocompletesearch_field'));
+		$opts->listid = $listId;
 
 		$opts = json_encode($opts);
 		$this->jsInstance = "new FbListAutocompletesearch($opts)";

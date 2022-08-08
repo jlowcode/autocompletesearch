@@ -5,7 +5,7 @@
  * @license:   GNU/GPL http://www.gnu.org/copyleft/gpl.html
  */
 
-define(['jquery', 'fab/list-plugin', 'fab/fabrik', 'lib/debounce/jquery.ba-throttle-debounce', 'plugins/fabrik_list/autocompletesearch/dist/js/select2.min.js'], function (jQuery, FbListPlugin, Fabrik, debounce, select2) {
+ define(['jquery', 'fab/list-plugin', 'fab/fabrik', 'lib/debounce/jquery.ba-throttle-debounce', 'plugins/fabrik_list/autocompletesearch/dist/js/select2.min.js'], function (jQuery, FbListPlugin, Fabrik, debounce, select2) {
 	var FbListautocompletesearch = new Class({
 
 		Extends: FbListPlugin,
@@ -28,7 +28,6 @@ define(['jquery', 'fab/list-plugin', 'fab/fabrik', 'lib/debounce/jquery.ba-throt
                 link.href = 'plugins/fabrik_list/autocompletesearch/dist/css/select2.min.css';
                 link.media = 'all';
                 head.appendChild(link);
-
             }
 
             this.inputSearch = jQuery(this.listform).find('.fabrik_filter.search-query.input-medium')[0];
@@ -46,7 +45,7 @@ define(['jquery', 'fab/list-plugin', 'fab/fabrik', 'lib/debounce/jquery.ba-throt
             jQuery(this.inputSearch).remove();
 
             jQuery(this.select2).select2({
-                dropdownAutoWidth: true                    
+                dropdownAutoWidth: true                 
             });
 
             jQuery(this.select2).append('<option></option>');
@@ -68,38 +67,32 @@ define(['jquery', 'fab/list-plugin', 'fab/fabrik', 'lib/debounce/jquery.ba-throt
             jQuery(this.select2).on('select2:open', function (e) {
                 var elSelectSearch = jQuery('.select2-search__field')[0];
                 if(!jQuery(elSelectSearch).prop('placeholder')){
-                    jQuery(elSelectSearch).attr('placeholder', 'Buscar em todos os campos');
+                    //jQuery(elSelectSearch).attr('placeholder', 'Buscar em todos os campos');
                 }
                 Fabrik.fireEvent('fabrik.listfilter.clear', [this]);
             });
 
             jQuery(this.select2).select2({
                 ajax: {
-                  delay: 250,
-                  url: 'index.php',
-                  data: function(params){
-                    var query = {
-                        option: 'com_fabrik',
-                        format: 'raw',
-                        task: 'plugin.pluginAjax',
-                        plugin: 'autocompletesearch',
-                        g: 'list',
-                        listref: self.options.listid,
-                        method: 'autocomplete_options',
-                        search: params.term,
-                        value: params.term,
-                        elName: self.options.elName,
-                        type: 'public'
-                    }
+                    delay: 250,
+                    url: function(params) {
+                        return 'index.php?option=com_fabrik&format=raw&view=list&listid=' + self.options.listid + '&fabrik_list_filter_all_' + self.options.listid + '_com_fabrik_' + self.options.listid + '=' + params.term
+                    },  
 
-                    return query;
+                  processResults: function(data) {
+                    dataFormat = JSON.parse(data.substr(0, data.indexOf('<script>'))).data[0] 
+                    arrFormat = dataFormat.map(function(row) {
+                        element = self.options.elName + '_raw';
+                        arr = {
+                            'id': row.data[element],
+                            'text': row.data[element]
+                        }
+                        return arr;
+                    });
 
-                  },
-
-                  processResults: function (data) {
                     // Transforms the top-level key of the response object from 'items' to 'results'
                     return {
-                      results: self.getUniqueListBy(JSON.parse(data.substr(0, data.indexOf('"}]') + 3)), 'id')
+                      results: self.getUniqueListBy(arrFormat, 'id')
                     };
                   }
 
